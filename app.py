@@ -7,4 +7,4 @@ app.include_router(book)
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello from Koyeb"}
+    return {"message": "Hello Guys, this is a FastAPI project for DataBase connection with MongoDB."}
