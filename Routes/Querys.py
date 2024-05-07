@@ -67,7 +67,7 @@ CONSULTA2 = [
     }
 ]
 
-@query.get("/prestamos/{RUT}")
+@query.get("/Query2/{RUT}")
 def get_librosUser(RUT: str):
     return list(db.prestamo.autor.aggregate([
         {'$match': {'RUT': RUT}},
