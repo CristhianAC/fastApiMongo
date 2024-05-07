@@ -7,9 +7,11 @@ from Routes.Prestamo import prestamo
 from Routes.Usuario import user
 from Routes.Edicion import edicion
 from Routes.Autor import author
+from Routes.Querys import query
 app = FastAPI()
-
+app.include_router(query)
 app.include_router(book)
+
 app.include_router(autorea)
 app.include_router(copia)
 app.include_router(prestamo)
