@@ -67,6 +67,6 @@ CONSULTA2 = [
     }
 ]
 
-@query.get("/prestamos/{RUT}")
-def get_librosUser():
+@query.get("/libroPerUser/{RUT}")
+def get_librosUser(RUT:str):
     return db.usuario.aggregate(CONSULTA2)
