@@ -25,7 +25,7 @@ CONSULTA2 = [
         '$lookup': {
             'from': 'copia',
             'localField': 'prestamo.numeroCopia',
-            'foreignField': 'numero',
+            'foreignField': 'numeroCopia',
             'as': 'copia'
         }
     },
@@ -67,6 +67,8 @@ CONSULTA2 = [
     }
 ]
 
-@query.get("/libroPerUser/{RUT}")
-def get_librosUser(RUT:str):
-    return db.usuario.aggregate(CONSULTA2)
+@query.get("/prestamos/{RUT}")
+def get_librosUser(RUT: str):
+    return list(db.prestamo.autor.aggregate([
+        {'$match': {'RUT': RUT}},
+    ] + CONSULTA2))
