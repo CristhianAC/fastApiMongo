@@ -12,57 +12,66 @@ CONSULTA1 = [
 CONSULTA2 = [
     {
         '$lookup': {
-            'from': 'prestamo',
-            'localField': 'RUT',
-            'foreignField': 'RUT',
-            'as': 'prestamo'
-        }
-    },
-    {
-        '$unwind': '$prestamo'  # Desenrollar el array 'prestamo'
-    },
-    {
-        '$lookup': {
-            'from': 'copia',
-            'localField': 'prestamo.numeroCopia',
-            'foreignField': 'numeroCopia',
-            'as': 'copia'
-        }
-    },
-    {
-        '$unwind': '$copia'  # Desenrollar el array 'copia'
-    },
-    {
-        '$match': {
-            'copia.ISBN': '$prestamo.ISBN'
-        }
-    },
-    {
-        '$lookup': {
             'from': 'edicion',
-            'localField': 'copia.ISBN',
-            'foreignField': 'ISBN',
+            'localField': 'editorial',
+            'foreignField': 'isbn',
             'as': 'edicion'
         }
     },
     {
-        '$unwind': '$edicion'  # Desenrollar el array 'edicion'
-    },
-    {
-        '$lookup': {
-            'from': 'libro',
-            'localField': 'edicion.ISBN',
-            'foreignField': 'editorial',
-            'as': 'libro'
+        '$match': {
+            'edicion': {'$ne': []}
         }
     },
     {
-        '$unwind': '$libro'  # Desenrollar el array 'libro'
+        '$lookup': {
+            'from': 'copia',
+            'localField': 'edicion.isbn',
+            'foreignField': 'ISBN',
+            'as': 'copia'
+        }
+    },
+    {
+        '$match': {
+            'copia': {'$ne': []}
+        }
+    },
+    {
+        '$lookup': {
+            'from': 'prestamo',
+            'localField': 'copia.ISBN',
+            'foreignField': 'ISBN',
+            'as': 'prestamo'
+        }
+    },
+    {
+        '$match': {
+            '$expr': {
+                '$eq': ['$copia.numero', '$prestamo.numeroCopia']
+            }
+        }
+    },
+    {
+        '$lookup':{
+            'from': 'usuario',
+            'localField': 'prestamo.RUT',
+            'foreignField':'RUT',
+            'as':'usuario'
+        }
+    },
+    {
+        '$match':{
+            'usuario':{
+                '$ne':[]
+            }
+        }
+
     },
     {
         '$project': {
-            '_id': 0,
-            'libro.titulo': 1
+            "_id": 0,
+            "titulo": 1,
+            
         }
     }
 ]
