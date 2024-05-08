@@ -16,15 +16,15 @@ def post_autoreas(autorea: Autorea):
     id = db.insert_one(new_autorea).inserted_id
     return str(id)
 
-@autorea.get("/autoreas/{nombre}")
-def get_autorea(nombre:str):
-    return autoreaEntity(db.find_one({"nombre":nombre},{}))
+@autorea.get("/autoreas/{tituloLibro}")
+def get_autorea(tituloLibro:str):
+    return autoreaEntity(db.find_one({"tituloLibro":tituloLibro},{}))
 
-@autorea.put("/autoreas/{nombre}")
-def update_autorea(nombre:str, autorea:Autorea):
-    db.find_one_and_update({"nombre":nombre},{"$set": dict(autorea)})
+@autorea.put("/autoreas/{tituloLibro}")
+def update_autorea(tituloLibro:str, autorea:Autorea):
+    db.find_one_and_update({"tituloLibro":tituloLibro},{"$set": dict(autorea)})
     
-@autorea.delete("/autoreas/{nombre}")
-def delete_autorea(nombre:str):
-    db.find_one_and_delete({"nombre":nombre})
+@autorea.delete("/autoreas/{tituloLibro}/{nombreAutor}")
+def delete_autorea(tituloLibro:str, nombreAutor:str):
+    db.find_one_and_delete({"tituloLibro":tituloLibro,"autorNombre":nombreAutor})
     return Response(status_code=HTTP_204_NO_CONTENT)

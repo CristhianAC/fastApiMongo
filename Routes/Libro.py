@@ -5,7 +5,7 @@ from Models.libro import libro
 from starlette.status import HTTP_204_NO_CONTENT
 book = APIRouter()
 db = conn.investigacionMongo.libro
-
+dbA = conn.investigacionMongo.autorea
 
 @book.get("/libros")
 def get_books():
@@ -28,5 +28,6 @@ def update_book(titulo:str, libro:libro):
     
 @book.delete("/libros/{titulo}")
 def delete_book(titulo:str):
+    dbA.find_one_and_delete({"tituloLibro":titulo})
     db.find_one_and_delete({"titulo":titulo})
     return Response(status_code=HTTP_204_NO_CONTENT)

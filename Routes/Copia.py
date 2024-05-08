@@ -5,7 +5,7 @@ from Models.Copia import Copia
 from starlette.status import HTTP_204_NO_CONTENT
 copia = APIRouter()
 db = conn.investigacionMongo.copia
-
+dbc = conn.investigacionMongo.prestamo
 @copia.get("/copias")
 def get_copias():
     return copiasEntity(db.find({},{}))
@@ -14,15 +14,16 @@ def post_copias(copia: Copia):
     new_copia = dict(copia)
     id = db.insert_one(new_copia).inserted_id
     return str(id)
-@copia.get("/copias/{titulo}")
-def get_copia(titulo:str):
-    return copiaEntity(db.find_one({"titulo":titulo},{}))
+@copia.get("/copias/{numero}")
+def get_copia(numero:int):
+    return copiaEntity(db.find_one({"numero":numero},{}))
 
-@copia.put("/copias/{titulo}")
-def update_copia(titulo:str, copia:Copia):
-    db.find_one_and_update({"titulo":titulo},{"$set": dict(copia)})
+@copia.put("/copias/{numero}")
+def update_copia(numero:int, copia:Copia):
+    db.find_one_and_update({"numero":numero},{"$set": dict(copia)})
 
-@copia.delete("/copias/{titulo}")
-def delete_copia(titulo:str):
-    db.find_one_and_delete({"titulo":titulo})
+@copia.delete("/copias/{numero}/{ISBN}")
+def delete_copia(numero:int, ISBN:str):
+    db.find_one_and_delete({"numero":numero, "ISBN":ISBN})
+    dbc.find_one_and_delete({"numeroCopia":numero, "ISBN":ISBN})
     return Response(status_code=HTTP_204_NO_CONTENT)

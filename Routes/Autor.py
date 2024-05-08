@@ -4,7 +4,7 @@ from Schemas.Autor import autorEntity, autoresEntity
 from Models.Autor import Autor
 author = APIRouter()
 db = conn.investigacionMongo.autor
-
+dbA = conn.investigacionMongo.autorea
 @author.get("/autores")
 def get_authors():
     return autoresEntity(db.find({},{}))
@@ -22,6 +22,7 @@ def update_author(nombre:str, autor:Autor):
 
 @author.delete("/autores/{nombre}")
 def delete_author(nombre:str):
+    dbA.find_one_and_delete({"autorNombre":nombre})
     db.find_one_and_delete({"nombre":nombre})
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 

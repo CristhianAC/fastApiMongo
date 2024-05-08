@@ -16,15 +16,15 @@ def post_prestamos(prestamo: Prestamo):
     id = db.insert_one(new_prestamo).inserted_id
     return str(id)
 
-@prestamo.get("/prestamos/{titulo}")
-def get_prestamo(titulo:str):
-    return prestamoEntity(db.find_one({"titulo":titulo},{}))
+@prestamo.get("/prestamos/{ISBN}/{numeroCopia}")
+def get_prestamo(ISBN:str, numeroCopia:int):
+    return prestamoEntity(db.find_one({"ISBN":ISBN, "numeroCopia":numeroCopia},{}))
 
-@prestamo.put("/prestamos/{titulo}")
-def update_prestamo(titulo:str, prestamo:Prestamo):
-    db.find_one_and_update({"titulo":titulo},{"$set": dict(prestamo)})
+@prestamo.put("/prestamos/{ISBN}/{numeroCopia}")
+def update_prestamo(ISBN:str, numeroCopia:int, prestamo:Prestamo):
+    db.find_one_and_update({"ISBN":ISBN, "numeroCopia":numeroCopia},{"$set": dict(prestamo)})
 
-@prestamo.delete("/prestamos/{titulo}")
-def delete_prestamo(titulo:str):
-    db.find_one_and_delete({"titulo":titulo})
+@prestamo.delete("/prestamos/{ISBN}/{numeroCopia}")
+def delete_prestamo(ISBN:str,numeroCopia:int):
+    db.find_one_and_delete({"ISBN":ISBN, "numeroCopia":numeroCopia})
     return Response(status_code=HTTP_204_NO_CONTENT)
