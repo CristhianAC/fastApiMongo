@@ -6,6 +6,7 @@ from starlette.status import HTTP_204_NO_CONTENT
 book = APIRouter()
 db = conn.investigacionMongo.libro
 dbA = conn.investigacionMongo.autorea
+dbE = conn.investigacionMongo.edicion
 
 @book.get("/libros")
 def get_books():
@@ -24,10 +25,12 @@ def get_book(titulo:str):
 @book.put("/libros/{titulo}")
 def update_book(titulo:str, libro:libro):
     db.find_one_and_update({"titulo":titulo},{"$set": dict(libro)})
-    
+    dbA.update_many({"tituloLibro":titulo},{"$set": {"tituloLibro":libro.titulo}})
+    dbE.update_many({"titulo":titulo},{"$set": {"titulo":libro.titulo}})
     
 @book.delete("/libros/{titulo}")
 def delete_book(titulo:str):
-    dbA.find_one_and_delete({"tituloLibro":titulo})
+    dbE.delete_many({"titulo":titulo})
+    dbA.delete_many({"tituloLibro":titulo})
     db.find_one_and_delete({"titulo":titulo})
     return Response(status_code=HTTP_204_NO_CONTENT)

@@ -19,8 +19,9 @@ def get_user(RUT:str):
 @user.put("/usuarios/{RUT}")
 def update_user(RUT:str, usuario:Usuario):
     db.find_one_and_update({"RUT":RUT},{"$set": dict(usuario)})
+    dbP.update_many({"RUT":RUT},{"$set": {'RUT':usuario.RUT}})
 @user.delete("/usuarios/{RUT}")
 def delete_user(RUT:str):
-    dbP.find_one_and_delete({"RUT":RUT})
+    dbP.delete_many({"RUT":RUT})
     db.find_one_and_delete({"RUT":RUT})
     return Response(status_code=status.HTTP_204_NO_CONTENT)

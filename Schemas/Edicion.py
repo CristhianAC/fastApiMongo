@@ -4,7 +4,7 @@ def edicionEntity(item:dict)->dict:
         "año": item['año'],
         "idioma": item['idioma'],
         "numeroCopia": item['numeroCopia'],
-       
+        "titulo": item['titulo']
     }
 def edicionesEntity(entity)->dict:
     return [edicionEntity(item) for item in entity]

@@ -129,6 +129,7 @@ CONSULTA2 = [
 @query.get("/Query1/")
 def get_copias():
     return list(db.libro.aggregate(CONSULTA1))
+
 @query.get("/Query2/{RUT}")
 def get_librosUser(RUT: str):
     CONSULTA2[8]['$match']['usuario.RUT'] = RUT

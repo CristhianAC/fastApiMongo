@@ -5,4 +5,5 @@ class Edicion(BaseModel):
     año: str
     idioma: str
     numeroCopia:int
+    titulo: str
     

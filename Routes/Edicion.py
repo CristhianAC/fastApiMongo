@@ -24,10 +24,10 @@ def get_edicion(ISBN:str):
 @edicion.put("/ediciones/{ISBN}")
 def update_edicion(ISBN:str, edicion:Edicion):
     db.find_one_and_update({"ISBN":ISBN},{"$set": dict(edicion)})
+    dbC.update_many({"ISBN":ISBN},{"$set": {'ISBN':edicion.ISBN}})
 @edicion.delete("/ediciones/{ISBN}")
 def delete_edicion(ISBN:str):
-    dbC.find_one_and_delete({"ISBN":ISBN})
-    dbP.find_one_and_delete({"ISBN":ISBN})
-    dbL.find_one_and_delete({"ISBN":ISBN},{"$set": {'ISBN':None}})
+    dbP.delete_many({"ISBN":ISBN})
+    dbC.delete_many({"ISBN":ISBN})
     db.find_one_and_delete({"ISBN":ISBN})
     return Response(status_code=HTTP_204_NO_CONTENT)

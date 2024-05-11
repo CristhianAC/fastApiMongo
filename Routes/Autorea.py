@@ -20,11 +20,11 @@ def post_autoreas(autorea: Autorea):
 def get_autorea(tituloLibro:str):
     return autoreaEntity(db.find_one({"tituloLibro":tituloLibro},{}))
 
-@autorea.put("/autoreas/{tituloLibro}")
-def update_autorea(tituloLibro:str, autorea:Autorea):
-    db.find_one_and_update({"tituloLibro":tituloLibro},{"$set": dict(autorea)})
+@autorea.put("/autoreas/{tituloLibro}/{nombreAutor}")
+def update_autorea(tituloLibro:str,nombreAutor:str, autorea:Autorea):
+    db.find_one_and_update({"tituloLibro":tituloLibro,"nombreAutor":nombreAutor},{"$set": dict(autorea)})
     
 @autorea.delete("/autoreas/{tituloLibro}/{nombreAutor}")
 def delete_autorea(tituloLibro:str, nombreAutor:str):
-    db.find_one_and_delete({"tituloLibro":tituloLibro,"autorNombre":nombreAutor})
+    db.delete_many({"tituloLibro":tituloLibro,"autorNombre":nombreAutor})
     return Response(status_code=HTTP_204_NO_CONTENT)
