@@ -3,6 +3,8 @@ import React, { useState } from "react";
 function App() {
   // Estados para manejar los datos del formulario, la operación seleccionada y los resultados de la API
   const [primaryKey, setPrimaryKey] = useState("");
+  const [objetivo, setObjetivo] = useState(""); 
+  const [objetivo2, setObjetivo2] = useState("");
   const [secKey, setSecKey] = useState("");
   const [terKey, setTerKey] = useState("");
   const [fechaPrestamo, setFechaPrestamo] = useState("");
@@ -22,32 +24,6 @@ function App() {
       let endpoint;
       let bodyData;
 
-      switch (tabla) {
-        case "Libro":
-          endpoint = "libros";
-          bodyData = { titulo: primaryKey };
-          break;
-        case "Autor":
-          endpoint = "autores";
-          bodyData = { nombre: primaryKey };
-          break;
-        case "Edicion":
-          endpoint = "ediciones";
-          bodyData = { isbn: primaryKey, año, idioma, numeroCopia, titulo };
-          break;
-        case "Autorea":
-          endpoint = "autoreas";
-          bodyData = { titulo: primaryKey, nombre: secKey };
-          break;
-        case "Copia":
-          endpoint = "copias";
-          bodyData = { isbn: primaryKey, numero: secKey };
-          break;
-        case "Usuario":
-          endpoint = "usuarios";
-          bodyData = { rut: primaryKey };
-          break;
-      }
       switch (operacion) {
         case "insertar":
           method = "POST";
@@ -63,7 +39,68 @@ function App() {
         default:
           throw new Error("Operación no válida");
       }
+      switch (tabla) {
+        case "Libro":
+          bodyData = { titulo: primaryKey };
+          if (operacion === "insertar") {
+            endpoint = "libros";
+            
+          } else {
+            endpoint = "libros/" + objetivo;
+          }
+          break;
+        case "Autor":
+          bodyData = { nombre: primaryKey };
+          if (operacion === "insertar") {
+            endpoint = "autores";
+            
+          } else {
+            endpoint = "autores/" + objetivo;
+            
+          }
+          break;
+        case "Edicion":
+          bodyData = { isbn: primaryKey, año, idioma, numeroCopia, titulo };
+          if (operacion === "insertar") {
+            endpoint = "ediciones";
+            
+          } else {
+            endpoint = "ediciones/" + objetivo;
+          }
 
+          break;
+        case "Autorea":
+
+          bodyData = { titulo: primaryKey, nombre: secKey };
+          if (operacion === "insertar") {
+            endpoint = "autoreas";
+            
+          } else {
+            endpoint = "autoreas" + objetivo+ "/" + objetivo2;
+            
+          }
+
+          break;
+        case "Copia":
+          bodyData = { isbn: primaryKey, numero: secKey };
+          if (operacion === "insertar") {
+          endpoint = "copias";
+          
+          } else {
+            endpoint = "copias/" + objetivo2 + "/" + objetivo;
+          }
+          break;
+        case "Usuario":
+          bodyData = { RUT: primaryKey , nombre: secKey};
+          if (operacion === "insertar") {
+            endpoint = "usuarios";
+            
+          } else {
+            endpoint = "usuarios/" + objetivo;
+          }
+          
+          break;
+      }
       const response = await fetch(
         `https://tricky-saraann-cristhianac.koyeb.app/${endpoint}`,
         {
@@ -109,6 +146,11 @@ function App() {
 
         {tabla === "Libro" && (
           <div>
+            {operacion === "actualizar"&&<input type="text"
+              placeholder="Titulo del libro objetivo"
+              value={objetivo}
+              onChange={(e) => setObjetivo(e.target.value)}
+              required></input>}
             <label>Titulo</label>
             <input
               type="text"
@@ -120,6 +162,11 @@ function App() {
         )}
         {tabla === "Autor" && (
           <div>
+            {operacion === "actualizar"&&<input type="text"
+              placeholder="Nombre del autor objetivo"
+              value={objetivo}
+              onChange={(e) => setObjetivo(e.target.value)}
+              required></input>}
             <label>Nombre</label>
             <input
               type="text"
@@ -132,6 +179,18 @@ function App() {
 
         {tabla === "Autorea" && (
           <div>
+            {operacion === "actualizar"&&<input type="text"
+              placeholder="titulo del libro objetivo"
+              value={objetivo}
+              onChange={(e) => setObjetivo(e.target.value)}
+              required></input>}
+
+            {operacion === "actualizar"&&<input type="text"
+              placeholder="Nombre del autor objetivo"
+              value={objetivo2}
+              onChange={(e) => setObjetivo2(e.target.value)}
+              required></input>}
+
             <label>Titulo del libro</label>
             <input
               type="text"
@@ -149,8 +208,13 @@ function App() {
           </div>
         )}
 
-        {tabla === "Edicion" && operacion === "insertar" && (
+        {tabla === "Edicion" && operacion !== "borrar" && (
           <div>
+            {operacion === "actualizar"&&<input type="text"
+              placeholder="ISBN del objetivo"
+              value={objetivo}
+              onChange={(e) => setObjetivo(e.target.value)}
+              required></input>}
             <label>ISBN:</label>
             <input
               type="text"
@@ -189,7 +253,7 @@ function App() {
           </div>
         )}
 
-        {tabla === "Edicion" && operacion != "insertar" && (
+        {tabla === "Edicion" && operacion === "borrar" && (
           <div>
             <label>ISBN:</label>
             <input
@@ -203,6 +267,17 @@ function App() {
 
         {tabla === "Copia" && (
           <div>
+            {operacion === "actualizar"&&<input type="text"
+              placeholder="ISBN del objetivo"
+              value={objetivo}
+              onChange={(e) => setObjetivo(e.target.value)}
+              required></input>}
+
+            {operacion === "actualizar"&&<input type="text"
+              placeholder="Numero del objetivo"
+              value={objetivo2}
+              onChange={(e) => setObjetivo2(e.target.value)}
+              required></input>}
             <label>ISBN: </label>
             <input
               type="text"
@@ -219,8 +294,16 @@ function App() {
             />
           </div>
         )}
-        {tabla === "Prestamo" && operacion === "insertar" && (
+
+
+        {tabla === "Prestamo" && operacion !== "borrar" && (
           <div>
+            {operacion === "actualizar"&&<input type="text"
+              placeholder="Llave Primaria del objetivo"
+              value={objetivo}
+              onChange={(e) => setObjetivo(e.target.value)}
+              required></input>}
+
             <label>ISBN: </label>
             <input
               type="text"
@@ -258,20 +341,25 @@ function App() {
             />
           </div>
         )}
-        {tabla === "Prestamo" && operacion !== "insertar" && (
+
+
+
+
+
+        {tabla === "Prestamo" && operacion === "borrar" && (
           <div>
             <label>ISBN: </label>
             <input
               type="text"
-              value={primaryKey}
-              onChange={(e) => setPrimaryKey(e.target.value)}
+              value={objetivo}
+              onChange={(e) => setObjetivo(e.target.value)}
               required
             />
             <label>Numero: </label>
             <input
               type="text"
               value={secKey}
-              onChange={(e) => setPrimaryKey(e.target.value)}
+              onChange={(e) => setSecKey(e.target.value)}
               required
             />
             <label>Rut: </label>
@@ -283,17 +371,45 @@ function App() {
             />
           </div>
         )}
-        {tabla === "Usuario" && operacion !== "insertar" && (
+
+
+
+        {tabla === "Usuario" && operacion !== "borrar" && (
+          <div>
+            {operacion === "actualizar"&&<input type="text"
+              placeholder="Llave Primaria del objetivo"
+              value={objetivo}
+              onChange={(e) => setObjetivo(e.target.value)}
+              required></input>}
+            <label>Rut: </label>
+            <input
+              type="text"
+              value={primaryKey}
+              onChange={(e) => setPrimaryKey(e.target.value)}
+              required
+            />
+            <label>Nombre: </label>
+            <input
+              type="text"
+              value={secKey}
+              onChange={(e) => setSecKey(e.target.value)}
+              required></input>
+          </div>
+        )}
+
+
+        {tabla === "Usuario" && operacion === "borrar" && (
           <div>
             <label>Rut: </label>
             <input
               type="text"
-              value={primaryKeyKey}
-              onChange={(e) => setPrimaryKey(e.target.value)}
+              value={objetivo}
+              onChange={(e) => setObjetivo(e.target.value)}
               required
             />
           </div>
         )}
+        
 
         <button type="submit">
           {operacion === "insertar"
