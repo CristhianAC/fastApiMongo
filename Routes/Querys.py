@@ -5,6 +5,23 @@ query = APIRouter()
 db = conn.investigacionMongo
 CONSULTA1 = [
     {
+        '$lookup':{
+            'from': 'autorea',
+            'localField': 'titulo',
+            'foreignField': 'tituloLibro',
+            
+            'as': 'autorea'
+        }
+    },
+    {
+        '$lookup':{
+            'from': 'autor',
+            'localField': 'autorea.autorNombre',
+            'foreignField': 'nombre',
+            'as': 'autor'
+        }
+    },
+    {
         '$lookup': {
             'from': 'edicion',
             'localField': 'titulo',
@@ -79,8 +96,9 @@ CONSULTA1 = [
     {
         '$project':{
             '_id':0,
-            'autor':1,
-            'edicion.isbn':1,
+            'titulo':1,
+            'autor.nombre':1,
+            'edicion.ISBN':1,
             'edicion.año':1,
             'edicion.idioma':1,
             'copia.numero':1

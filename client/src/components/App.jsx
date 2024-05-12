@@ -573,10 +573,14 @@ function App() {
         </div>
 
         <div>{response2R && query === "Query1" && response2R.map(item => (
-          <div key={item.copia.numero}>
+          <div key={item.titulo}>
+              <h2>{item.titulo}</h2>
+              
               <p>Numero: {item.copia.numero}</p>
-              <p>ISBN: {item.edicion.año}</p>
-              <p>año: {item.edicion.idioma}</p>
+              <p>ISBN: {item.edicion.ISBN}</p>
+              <p>año: {item.edicion.año}</p>
+              <p>idioma: {item.edicion.idioma}</p>
+            
           </div>
         ))}</div>
       </form>
