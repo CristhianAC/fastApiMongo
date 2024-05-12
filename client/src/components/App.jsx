@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@fluentui/react";
 
 function App() {
@@ -21,6 +21,10 @@ function App() {
   const [RUTQ, setRUTQ] = useState("");
   const [response2R, setResponse2R] = useState("");
   // Función para enviar los datos del formulario y realizar operaciones CRUD en la API
+  useEffect(() => {
+    setResponse2R("");
+    setRUTQ("");
+  }, [query]);
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -121,7 +125,7 @@ function App() {
           body: JSON.stringify(bodyData),
         }
       );
-
+      setResultado(`Operación ${operacion} realizada con éxito`);
       if (!response.ok) {
         throw new Error(`Error al ${operacion} usuario`);
       }
@@ -147,11 +151,11 @@ function App() {
           },
         }
       );
-  
+
       if (!response2.ok) {
         throw new Error(`Error ${response2.status} al realizar la petición.`);
       }
-  
+
       const responseData = await response2.json();
       setResponse2R(responseData);
       console.log(responseData);
@@ -507,7 +511,7 @@ function App() {
                 className=" border border-gray-400 rounded p-1"
               ></input>
             )}
-            { operacion !== "borrar" &&
+            {operacion !== "borrar" && (
               <div>
                 <label>Rut: </label>
                 <input
@@ -526,7 +530,7 @@ function App() {
                   className=" border border-gray-400 rounded p-1"
                 ></input>
               </div>
-            }
+            )}
           </div>
         )}
 
@@ -538,6 +542,7 @@ function App() {
             : "Borrar"}{" "}
           {tabla}
         </Button>
+        <div>{resultado}</div>
       </form>
       <div></div>
       <form
@@ -572,17 +577,31 @@ function App() {
           <Button type="submit">Realizar Solicitud</Button>
         </div>
 
-        <div>{response2R && query === "Query1" && response2R.map(item => (
-          <div key={item.titulo}>
+        <div>
+          {response2R &&
+            query === "Query1" &&
+            response2R.map((item) => (
+              <div key={item.titulo}>
+                <h2>{item.titulo}</h2>
+
+                <p>Numero: {item.copia.numero}</p>
+                <p>ISBN: {item.edicion.ISBN}</p>
+                <p>año: {item.edicion.año}</p>
+                <p>idioma: {item.edicion.idioma}</p>
+              </div>
+            ))}
+        </div>
+
+        {response2R && query === "Query2" && (
+          <h2>Los libros prestados por el usario con el RUT {RUTQ} son: </h2>
+        )}
+        {response2R &&
+          query === "Query2" &&
+          response2R.map((item) => (
+            <div key={item.titulo}>
               <h2>{item.titulo}</h2>
-              
-              <p>Numero: {item.copia.numero}</p>
-              <p>ISBN: {item.edicion.ISBN}</p>
-              <p>año: {item.edicion.año}</p>
-              <p>idioma: {item.edicion.idioma}</p>
-            
-          </div>
-        ))}</div>
+            </div>
+          ))}
       </form>
     </div>
   );
