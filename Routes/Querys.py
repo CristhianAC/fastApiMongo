@@ -96,7 +96,7 @@ CONSULTA1 = [
     {
         '$project':{
             '_id':0,
-            'titulo':1,
+            'titulo': 1,
             'autor.nombre':1,
             'edicion.ISBN':1,
             'edicion.año':1,
