@@ -1,6 +1,6 @@
 def edicionEntity(item:dict)->dict:
     return {
-        "isbn": item['isbn'], # Convertir el ObjectId de mongo en un string para que pueda ser serializado a JSON
+        "ISBN": item['ISBN'], # Convertir el ObjectId de mongo en un string para que pueda ser serializado a JSON
         "año": item['año'],
         "idioma": item['idioma'],
         "numeroCopia": item['numeroCopia'],

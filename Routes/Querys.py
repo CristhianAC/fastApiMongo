@@ -7,8 +7,8 @@ CONSULTA1 = [
     {
         '$lookup': {
             'from': 'edicion',
-            'localField': 'editorial',
-            'foreignField': 'isbn',
+            'localField': 'titulo',
+            'foreignField': 'titulo',
             'as': 'edicion'
         }
     },
@@ -20,7 +20,7 @@ CONSULTA1 = [
     {
         '$lookup': {
             'from': 'copia',
-            'localField': 'edicion.isbn',
+            'localField': 'edicion.ISBN',
             'foreignField': 'ISBN',
             'as': 'copia'
         }
@@ -59,8 +59,8 @@ CONSULTA2 = [
     {
         '$lookup': {
             'from': 'edicion',
-            'localField': 'editorial',
-            'foreignField': 'isbn',
+            'localField': 'titulo',
+            'foreignField': 'titulo',
             'as': 'edicion'
         }
     },
@@ -72,7 +72,7 @@ CONSULTA2 = [
     {
         '$lookup': {
             'from': 'copia',
-            'localField': 'edicion.isbn',
+            'localField': 'edicion.ISBN',
             'foreignField': 'ISBN',
             'as': 'copia'
         }
