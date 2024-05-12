@@ -10,7 +10,7 @@ function App() {
   const [terKey, setTerKey] = useState("");
   const [fechaPrestamo, setFechaPrestamo] = useState("");
   const [fechaDevolucion, setFechaDevolucion] = useState("");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("Query1");
   const [año, setAño] = useState("");
   const [idioma, setIdioma] = useState("");
   const [numeroCopia, setNumeroCopia] = useState("");
@@ -95,6 +95,21 @@ function App() {
           }
 
           break;
+        case "Prestamo":
+          bodyData = {
+            ISBN: primaryKey,
+            numeroCopia: secKey,
+            RUT: terKey,
+            fechaPrestamo: fechaPrestamo,
+            fechaDevolucion: fechaDevolucion,
+          };
+          if (operacion === "insertar") {
+            endpoint = "prestamos";
+          } else {
+            endpoint = "prestamos/" + objetivo + "/" + objetivo2;
+          }
+
+          break;
       }
       const response = await fetch(
         `https://tricky-saraann-cristhianac.koyeb.app/${endpoint}`,
@@ -115,22 +130,34 @@ function App() {
     }
   };
   const handleSubmitQuerys = async (event) => {
-    let endpoint;
-    if (query === "query1") {
-      endpoint = "Query1";
-    } else {
-      endpoint = "Query2/" + RUTQ;
+    event.preventDefault();
+    let endpoint2;
+    if (query === "Query1") {
+      endpoint2 = "Query1";
+    } else if (query === "Query2") {
+      endpoint2 = "Query2/" + RUTQ;
     }
-    const response2 = await fetch(
-      `https://tricky-saraann-cristhianac.koyeb.app/${endpoint}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    try {
+      const response2 = await fetch(
+        `https://tricky-saraann-cristhianac.koyeb.app/${endpoint2}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      if (!response2.ok) {
+        throw new Error(`Error ${response2.status} al realizar la petición.`);
       }
-    );
-    setResponse2R(response2.json());
+  
+      const responseData = await response2.json();
+      setResponse2R(responseData);
+      console.log(responseData);
+    } catch (error) {
+      console.error("Error al procesar la solicitud:", error);
+    }
   };
   return (
     <div className=" flex flex-col justify-center gap-10 bg-slate-400 p-9 rounded-2xl shadow-2xl  shadow-black/50 animate-blurred-fade-in ">
@@ -428,7 +455,7 @@ function App() {
                   <input
                     type="text"
                     value={secKey}
-                    onChange={(e) => setPrimaryKey(e.target.value)}
+                    onChange={(e) => setSecKey(e.target.value)}
                     required
                     className=" border border-gray-400 rounded p-1"
                   />
@@ -544,7 +571,14 @@ function App() {
           )}
           <Button type="submit">Realizar Solicitud</Button>
         </div>
-        <div>{response2R}</div>
+
+        <div>{response2R && query === "Query1" && response2R.map(item => (
+          <div key={item.copia.numero}>
+              <p>Numero: {item.copia.numero}</p>
+              <p>ISBN: {item.edicion.año}</p>
+              <p>año: {item.edicion.idioma}</p>
+          </div>
+        ))}</div>
       </form>
     </div>
   );
