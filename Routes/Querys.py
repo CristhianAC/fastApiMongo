@@ -31,18 +31,51 @@ CONSULTA1 = [
         }
     },
     {
-        '$lookup': {
-            'from': 'prestamo',
-            'localField': 'copia.numero',
-            'foreignField': 'numeroCopia',
-            'as': 'prestamo'
-        }
+    "$lookup": {
+      "from": "prestamo",
+      "let": {
+        "localNumero": "$copia.numero",
+        "localISBN": "$copia.ISBN",
+      },
+      "pipeline": [
+        {
+          "$match": {
+            "$expr": {
+              "$and": [
+                {
+                  "$eq": [
+                    "$numeroCopia",
+                    "$$localNumero",
+                  ],
+                },
+                {
+                  "$eq": ["$ISBN", "$$localISBN"],
+                },
+              ],
+            },
+          },
+        },
+      ],
+      "as": "prestamo",
     },
-    {
-        '$match': {
-            'prestamo': []
-        }
+  },
+  {
+    "$match": {
+      "prestamo": [],
     },
+  },
+  {
+    "$unwind": {
+      "path": "$edicion",
+    },
+  },
+  {
+    "$unwind":
+      
+      {
+        "path": "$copia",
+      },
+  },
     {
         '$project':{
             '_id':0,
