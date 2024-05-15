@@ -65,7 +65,7 @@ function App() {
           }
           break;
         case "Edicion":
-          bodyData = { isbn: primaryKey, año, idioma, numeroCopia, titulo };
+          bodyData = { ISBN: primaryKey, año, idioma, numeroCopia, titulo };
           if (operacion === "insertar") {
             endpoint = "ediciones";
           } else {
@@ -127,7 +127,7 @@ function App() {
       );
       setResultado(`Operación ${operacion} realizada con éxito`);
       if (!response.ok) {
-        throw new Error(`Error al ${operacion} usuario`);
+        throw new Error(`Error al ${operacion}`);
       }
     } catch (error) {
       setResultado(`Error: ${error.message}`);
